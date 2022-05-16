@@ -1,10 +1,20 @@
 //#[macro_use]
 //extern crate rocket;
-use rocket::{get, launch, routes};
+use rocket::{get, launch, post, routes};
 
 #[get("/")]
 fn index() -> &'static str {
     "Hello, world!"
+}
+
+#[post("/", data = "<input>")]
+async fn post_new(input: S) -> String {
+    format!("Data: {input}")
+}
+
+#[get("/<shortener>")]
+async fn get_data(shortener: &str) -> String {
+    format!("Shortener: {shortener}")
 }
 
 #[get("/monster/<name>")]
@@ -14,5 +24,5 @@ async fn monster(name: &str) -> String {
 
 #[launch]
 fn rocket() -> _ {
-    rocket::build().mount("/", routes![index, monster])
+    rocket::build().mount("/", routes![index, get_data, monster])
 }
