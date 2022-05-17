@@ -7,8 +7,8 @@ fn index() -> &'static str {
     "Hello, world!"
 }
 
-#[post("/", data = "<input>")]
-async fn post_new(input: S) -> String {
+#[post("/", data = "<input>", format = "text")]
+async fn post_new(input: &str) -> String {
     format!("Data: {input}")
 }
 
@@ -24,5 +24,5 @@ async fn monster(name: &str) -> String {
 
 #[launch]
 fn rocket() -> _ {
-    rocket::build().mount("/", routes![index, get_data, monster])
+    rocket::build().mount("/", routes![index, get_data, post_new, monster])
 }
